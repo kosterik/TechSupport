@@ -1,3 +1,6 @@
+"""Главная точка входа в приложение TechSupport."""
+
+
 def main():
     print("hello world")
 
