@@ -6,16 +6,16 @@ import sys
 import unittest
 from unittest.mock import patch
 
-# Добавление путей к модулям
+# Добавление каталога src в системные пути поиска модулей
 _current_dir = os.path.dirname(__file__)
 _src_dir = os.path.abspath(os.path.join(_current_dir, "..", "src"))
 if _src_dir not in sys.path:
     sys.path.insert(0, _src_dir)
 
 try:
-    from techsupport.main import main
+    from techsupport.main import main  # type: ignore[import-not-found, missing-import]
 except ImportError:
-    from src.techsupport.main import main
+    from src.techsupport.main import main  # type: ignore[import-not-found, missing-import]
 
 
 class TestTechSupportMain(unittest.TestCase):
