@@ -1,0 +1,89 @@
+@startuml
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam linetype ortho
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+
+entity "roles" as roles {
+    * role_id : INTEGER <<PK, AUTOINCREMENT>>
+    --
+    * name : TEXT <<UNIQUE>>
+    description : TEXT
+}
+
+entity "users" as users {
+    * user_id : INTEGER <<PK, AUTOINCREMENT>>
+    --
+    * login : TEXT <<UNIQUE>>
+    * password_hash : TEXT
+    * full_name : TEXT
+    * role_id : INTEGER <<FK>>
+    * created_at : TEXT
+}
+
+entity "user_profiles" as user_profiles {
+    * user_id : INTEGER <<PK, FK>>
+    --
+    email : TEXT <<UNIQUE>>
+    phone : TEXT
+    department : TEXT
+}
+
+entity "categories" as categories {
+    * category_id : INTEGER <<PK, AUTOINCREMENT>>
+    --
+    * name : TEXT <<UNIQUE>>
+    description : TEXT
+}
+
+entity "priorities" as priorities {
+    * priority_id : INTEGER <<PK, AUTOINCREMENT>>
+    --
+    * name : TEXT <<UNIQUE>>
+    * level : INTEGER <<UNIQUE>>
+}
+
+entity "statuses" as statuses {
+    * status_id : INTEGER <<PK, AUTOINCREMENT>>
+    --
+    * name : TEXT <<UNIQUE>>
+    description : TEXT
+}
+
+entity "tickets" as tickets {
+    * ticket_id : INTEGER <<PK, AUTOINCREMENT>>
+    --
+    * title : TEXT
+    * description : TEXT
+    * client_id : INTEGER <<FK>>
+    assignee_id : INTEGER <<FK>>
+    * category_id : INTEGER <<FK>>
+    * priority_id : INTEGER <<FK>>
+    * status_id : INTEGER <<FK>>
+    * created_at : TEXT
+    * updated_at : TEXT
+}
+
+entity "tags" as tags {
+    * tag_id : INTEGER <<PK, AUTOINCREMENT>>
+    --
+    * name : TEXT <<UNIQUE>>
+}
+
+entity "ticket_tags" as ticket_tags {
+    * ticket_id : INTEGER <<PK, FK>>
+    * tag_id : INTEGER <<PK, FK>>
+}
+
+roles ||--o{ users : "1:N (role_id)"
+users ||--|| user_profiles : "1:1 (user_id)"
+users ||--o{ tickets : "1:N (client_id)"
+users ||--o{ tickets : "1:N (assignee_id)"
+categories ||--o{ tickets : "1:N (category_id)"
+priorities ||--o{ tickets : "1:N (priority_id)"
+statuses ||--o{ tickets : "1:N (status_id)"
+tickets ||--o{ ticket_tags : "1:N (ticket_id)"
+tags ||--o{ ticket_tags : "1:N (tag_id)"
+
+@enduml
